@@ -15,6 +15,7 @@ namespace Tabii.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        [Required]
         public string Image { get; set; }
         [Range(1, 1000,ErrorMessage ="Price should be beetween $1 and $1000")]
         public double Price { get; set; }
