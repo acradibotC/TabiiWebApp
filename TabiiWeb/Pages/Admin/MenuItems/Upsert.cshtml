@@ -51,7 +51,14 @@
                 }
             </div>
            </div>
-           <button type="submit" class="btn btn-primary" style="width:150px;">@(Model.MenuItem.Id != 0 ? "Update" : "Create")</button>
+        @if (Model.MenuItem.Id != 0)
+        {
+            <button type="submit" class="btn btn-primary" style="width:150px;">Update</button>
+        }
+        else
+        {
+        <button type="submit" onclick="return ValidateInput() " class="btn btn-primary" style="width:150px;">Create</button>
+        }
            <a asp-page="Index" class="btn btn-secondary" style="width:150px;">Back to List</a>
         </div>
 
@@ -71,8 +78,20 @@
             ],
             ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
         });
+
+        function ValidateInput() {
+            if (document.getElementById("uploadBox").value=="") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please upload an Image!',
+                })
+                return false;
+            }
+            return true;
+        }
     </script>
     @{
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
     }
 }

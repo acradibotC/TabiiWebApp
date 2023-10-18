@@ -43,11 +43,14 @@ function Delete(url) {
                     type: 'delete',
                     success: function (data) {
                         if (data.success) {
-                            dataTable.ajax.reload();
+                            table.ajax.reload();
                             //success notification
+                            toastr.success(data.message);
                         }
                         else {
                             //failure notification
+                            toastr.error(data.message);
+
                         }
                     }
                 })
