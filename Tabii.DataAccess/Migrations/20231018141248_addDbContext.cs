@@ -4,7 +4,7 @@
 
 namespace Tabii.DataAccess.Migrations
 {
-    public partial class addMenuItem : Migration
+    public partial class addDbContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
