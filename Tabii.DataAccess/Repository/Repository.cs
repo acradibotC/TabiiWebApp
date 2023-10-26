@@ -19,7 +19,7 @@ namespace Tabii.DataAccess.Repository
         {
             _db = db;
             //FoodType,Category
-            //_db.MenuItem.Include(u => u.FoodType).Include(u => u.Category);
+            //_db.ShoppingCart.Include(u => u.MenuItem).ThenInclude(u => u.Category);
             this.dbSet=db.Set<T>();
         }
         public void Add(T entity)

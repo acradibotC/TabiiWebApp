@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Tabii.Utilities;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,20 +26,39 @@
                         <li class="nav-item">
                             <a class="nav-link text-while" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-page="/Admin/Categories/Index">Categories</a>
-                                <a class="dropdown-item" asp-area="" asp-page="/Admin/FoodTypes/Index">Food Types</a>
-                                <a class="dropdown-item" asp-area="" asp-page="/Admin/MenuItems/Index">Menu Item</a>
-                                <div class="dropdown-divider"></div>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link text-while" asp-area="" asp-page="/Admin/Order/OrderList">Order List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-while" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Order</a>
+                        </li>
+                        @if (User.IsInRole(SD.ManageRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/Categories/Index">Categories</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/FoodTypes/Index">Food Types</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Admin/MenuItems/Index">Menu Item</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register Employee</a>
+                                </div>
+                            </li>
+                        }
+
+                        <li>
+                            <a class="nav-link text-white-50" asp-area="" asp-page="/Customer/Cart/Index">
+                                <i class="bi bi-cart"></i>
+                            </a>
+
                         </li>
                     </ul>
+                        <partial name="_LoginPartial" >
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
@@ -46,9 +66,9 @@
         </main>
     </div>
 
-    <footer class="footer card-footer text-muted bg-primary">
+    <footer class="footer text-white bg-primary">
         <div class="container">
-            &copy; 2023 - TabiiWeb - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2023 - TabiiWeb - <a class="text-white" asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -59,6 +79,7 @@
     <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

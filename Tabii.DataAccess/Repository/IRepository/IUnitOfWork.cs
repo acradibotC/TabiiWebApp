@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,10 @@ namespace Tabii.DataAccess.Repository.IRepository
         ICategoryRepository Category { get; }
         IFoodTypeRepository FoodType { get; }
         IMenuItemRepository MenuItem { get; }
+        IShoppingCartRepository ShoppingCart { get; }
+        IOrderHeaderRepository OrderHeader { get; }
+        IOrderDetailsRepository OrderDetails { get; }
+        IApplicationUserRepository ApplicationUser { get; }
 
         void Save();
     }

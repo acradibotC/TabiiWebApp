@@ -1,0 +1,60 @@
+﻿let table = new DataTable('#DT_load', {
+    "ajax": {
+        "url": "/api/order",
+        "type": "GET",
+        "datatype": "json"
+    },
+    "columns": [
+        {"data":"id","width":"15%"},
+        { "data": "pickUpName", "width": "15%" },
+        { "data": "applicationUser.email", "width": "15%" },
+        { "data": "orderTotal", "width": "15%" },
+        { "data": "pickUpTime", "width": "25%" },
+        {
+            "data": "id",
+            "render": function (data) {
+                return `<div class="w-75 btn-group">
+                            <a href="/Admin/Order/OrderDetails?id=${data}" class="btn btn-primary text-white mx-2">
+                            <i class="bi bi-pencil-square"></i></a>
+                            
+                        </div >`
+            },
+            "width": "15%"
+        },
+    ],
+    "width":"100%"
+
+});
+
+function Delete(url) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                $.ajax({
+                    url: url,
+                    type: 'delete',
+                    success: function (data) {
+                        if (data.success) {
+                            table.ajax.reload();
+                            //success notification
+                            toastr.success(data.message);
+                        }
+                        else {
+                            //failure notification
+                            toastr.error(data.message);
+
+                        }
+                    }
+                })
+            )
+        }
+    })
+}
