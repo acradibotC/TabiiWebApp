@@ -1,4 +1,5 @@
 ﻿@page
+@using Tabii.Utilities;
 @model TabiiWeb.Pages.Admin.Order.OrderDetailsModel
 @{
 }
@@ -71,24 +72,26 @@
             </div>
 
             <div class="col-lg-4 col-12">
-                <h4 class="d-flex justify-content-between align-content-center mb-3">
+                <button type="submit" disabled class="btn btn-outline-info form-control">@Model.OrderDetailsVM.OrderHeader.Status</button>
+                <h4 class="d-flex justify-content-between align-content-center mb-3 pt-3">
                     <span class="text-muted">Order ID: </span>
                     <span class="badge badge-secondary badge-pill">@Model.OrderDetailsVM.OrderHeader.Id</span>
                 </h4>
                 <ul class="list-group mb-3">
-                    @foreach(var detail in Model.OrderDetailsVM.OrderDetails){
-                    <li class="list-group-item d-flex justify-content-between">
-                        <div>
-                            <h6 class="my-0">@detail.Name</h6>
-                            <small class="text-muted">Quantity : @detail.Count</small>
-                        </div>
-                        <span class="text-muted">
+                    @foreach (var detail in Model.OrderDetailsVM.OrderDetails)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <h6 class="my-0">@detail.Name</h6>
+                                <small class="text-muted">Quantity : @detail.Count</small>
+                            </div>
+                            <span class="text-muted">
                                 @{
                                     var formattedPrice = string.Format("{0:n0}", detail.Price * detail.Count);
                                     @formattedPrice
-                                }   
-                        </span>
-                    </li>
+                                }
+                            </span>
+                        </li>
                     }
 
 
@@ -99,28 +102,56 @@
                                 var formattedTotal = string.Format("{0:n0}", Model.OrderDetailsVM.OrderHeader.OrderTotal);
                                 @formattedTotal
                             }
-                            
-                            </strong>
+
+                        </strong>
                     </li>
 
                 </ul>
 
-                <button type="submit" disabled class="btn btn-info form-control">ORDER STATUS</button>
-
 
                 <div class="row pt-3">
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-warning form-control"><i class="bi bi-x-square"></i> Cancel Order</button>
-                    </div>
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-danger form-control"><i class="bi bi-currency-dollar"></i> Refund Order</button>
-                    </div>
+                    @if (Model.OrderDetailsVM.OrderHeader.Status == SD.StatusReady
+                    && (User.IsInRole(SD.ManageRole) || User.IsInRole(SD.FrontDeskRole)))
+                    {
+                        <div class="col-12 pb-2">
+                            <button type="submit" class="btn btn-primary form-control"
+                                    asp-page-handler="OrderCompleted" asp-route-orderId="@Model.OrderDetailsVM.OrderHeader.Id">
+                                Complete Order
+                            </button>
+                        </div>
+                    }
+
+                    @if ((Model.OrderDetailsVM.OrderHeader.Status == SD.StatusReady ||
+                    Model.OrderDetailsVM.OrderHeader.Status == SD.StatusInProcess ||
+                    Model.OrderDetailsVM.OrderHeader.Status == SD.StatusSubmitted)
+                    && (User.IsInRole(SD.ManageRole) || User.IsInRole(SD.FrontDeskRole)))
+                    {
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-warning form-control"
+                                    asp-page-handler="OrderCancel" asp-route-orderId="@Model.OrderDetailsVM.OrderHeader.Id">
+                                <i class="bi bi-x-square"></i> Cancel Order
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-danger form-control"
+                                    asp-page-handler="OrderRefund" asp-route-orderId="@Model.OrderDetailsVM.OrderHeader.Id">
+                                <i class="bi bi-currency-dollar"></i> Refund Order
+                            </button>
+                        </div>
+                    }
+
+                    @if ((Model.OrderDetailsVM.OrderHeader.Status == SD.StatusCancelled)
+                    && (User.IsInRole(SD.ManageRole) || User.IsInRole(SD.FrontDeskRole)))
+                    {
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-danger form-control"
+                                    asp-page-handler="OrderRefund" asp-route-orderId="@Model.OrderDetailsVM.OrderHeader.Id">
+                                <i class="bi bi-currency-dollar"></i> Refund Order
+                            </button>
+                        </div>
+                    }
                 </div>
-
-
-
             </div>
-
         </div>
     </div>
 </form>

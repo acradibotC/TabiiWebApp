@@ -31,6 +31,13 @@ namespace TabiiWeb
 				options.LogoutPath = "/Identity/Account/Logout";
 				options.AccessDeniedPath = "/Identity/Account/AccessDenined";
 			});
+			builder.Services.AddDistributedMemoryCache();
+			builder.Services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromMinutes(100);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -51,7 +58,7 @@ namespace TabiiWeb
 			app.UseAuthentication(); ;
 
 			app.UseAuthorization();
-
+			app.UseSession();
 			app.MapRazorPages();
 			app.MapControllers();
 			app.Run();

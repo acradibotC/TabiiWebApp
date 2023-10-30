@@ -6,7 +6,10 @@ using System.Security.Claims;
 using Tabii.DataAccess.Repository.IRepository;
 using Tabii.Models;
 using Tabii.Utilities;
-using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
+using System.Collections.Generic;
+using System.Linq;
+using Stripe;
+using Microsoft.Extensions.Options;
 
 namespace TabiiWeb.Pages.Customer.Cart
 {
@@ -103,13 +106,14 @@ namespace TabiiWeb.Pages.Customer.Cart
                             Currency = "vnd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = item.MenuItem.Name,
+                                Name = item.MenuItem.Name
                             },
                         },
                         Quantity = item.Count
                     };
-                options.LineItems.Add(sessionLineItem);
+                    options.LineItems.Add(sessionLineItem);
                 }
+
                 var service = new SessionService();
                 Session session = service.Create(options);
                 Response.Headers.Add("Location", session.Url);
@@ -119,6 +123,6 @@ namespace TabiiWeb.Pages.Customer.Cart
                 return new StatusCodeResult(303);
             }
             return Page();
-        }
+         }
     }
 }

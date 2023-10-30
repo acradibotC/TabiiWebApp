@@ -1,19 +1,69 @@
 ﻿@page
 @model TabiiWeb.Pages.Admin.Order.OrderListModel
 @{
+    var status = HttpContext.Request.Query["status"];
+    var cancelled = "text-primary";
+    var completed = "text-primary";
+    var inprocess = "text-primary";
+    var ready = "text-primary";
+    var all = "text-primary";
+
+    if (status == "cancelled")
+    {
+        cancelled = "active text-white";
+    }
+    else
+    {
+        if (status == "completed")
+        {
+            completed = "active text-white";
+        }
+        else
+        {
+            if (status == "ready")
+            {
+                ready = "active text-white";
+            }
+            else
+            {
+                if (status == "inprocess")
+                {
+                    inprocess = "active text-white";
+                }
+                else
+                {
+                    all = "active text-white";
+                }
+            }
+        }
+    }
+
 }
 
 
 <div class="container p-3">
-    <div class="row pt-4">
-        <div class="col-6">
+    <div class="d-flex justify-content-between">
+        <div class="p-2">
             <h2 class="text-primary">Order List</h2>
         </div>
-        <div class="col-6 text-end ">
-            <a asp-page="upsert" class="btn btn-primary">
-                <i class="bi bi-plus-square"></i>
-                &nbsp;Create New Item
-            </a>
+        <div class="p-2">
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none;" asp-page="OrderList" asp-route-status="all">
+                <li class="list-group-item @all">All</li>
+                </a>
+                <a style="text-decoration:none;" asp-page="OrderList" asp-route-status="cancelled">
+                <li class="list-group-item @cancelled">Cancelled</li>
+                </a>
+                <a style="text-decoration:none;" asp-page="OrderList" asp-route-status="completed">
+                <li class="list-group-item @completed">Completed</li>
+                </a>
+                <a style="text-decoration:none;" asp-page="OrderList" asp-route-status="ready">
+                <li class="list-group-item @ready">Ready For PickUp</li>
+                </a>
+                <a style="text-decoration:none;" asp-page="OrderList" asp-route-status="inprocess">
+                <li class="list-group-item @inprocess">In Process</li>
+                </a>
+            </ul>
         </div>
     </div>
 

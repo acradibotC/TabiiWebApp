@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewComponents\" />
     <Folder Include="wwwroot\images\menuItems\" />
   </ItemGroup>
 

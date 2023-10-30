@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Tabii.DataAccess.Repository.IRepository;
 using Tabii.Models;
+using Tabii.Utilities;
 
 namespace TabiiWeb.Pages.Customer.Home
 {
@@ -40,6 +41,8 @@ namespace TabiiWeb.Pages.Customer.Home
                 {
                     _unitOfWork.ShoppingCart.Add(ShoppingCart);
                     _unitOfWork.Save();
+                    HttpContext.Session.SetInt32(SD.SessionCart,
+                        _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == ShoppingCart.ApplicationUserId).ToList().Count);
                 }
                 else
                 {

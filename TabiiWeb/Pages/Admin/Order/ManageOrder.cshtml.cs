@@ -5,9 +5,11 @@ using Tabii.Models;
 using Tabii.Models.ViewModel;
 using System.Linq;
 using Tabii.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TabiiWeb.Pages.Admin.Order
 {
+    [Authorize(Roles = $"{SD.ManageRole},{SD.KitchenRole}")]
     public class ManageOrderModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -30,7 +32,28 @@ namespace TabiiWeb.Pages.Admin.Order
                     OrderHeader = item,
                     OrderDetails = _unitOfWork.OrderDetails.GetAll(u => u.OrderId == item.Id).ToList()
                 };
+                OrderDetailsVM.Add(individual);
             }
+        }
+
+        public IActionResult OnPostOrderInProcess(int orderId)
+        {
+            _unitOfWork.OrderHeader.UpdateStatus(orderId, SD.StatusInProcess);
+            _unitOfWork.Save();
+            return RedirectToPage("ManageOrder");
+        }
+
+        public IActionResult OnPostOrderReady(int orderId)
+        {
+            _unitOfWork.OrderHeader.UpdateStatus(orderId, SD.StatusReady);
+            _unitOfWork.Save();
+            return RedirectToPage("ManageOrder");
+        }
+        public IActionResult OnPostOrderCancel(int orderId)
+        {
+            _unitOfWork.OrderHeader.UpdateStatus(orderId, SD.StatusCancelled);
+            _unitOfWork.Save();
+            return RedirectToPage("ManageOrder");
         }
     }
 }

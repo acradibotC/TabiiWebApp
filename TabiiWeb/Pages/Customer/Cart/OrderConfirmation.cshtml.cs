@@ -25,6 +25,7 @@ namespace TabiiWeb.Pages.Customer.Cart
                 Session session = service.Get(orderHeader.SessionId);
                 if (session.PaymentStatus.ToLower()=="paid")
                 {
+                    orderHeader.PaymentIntentId = session.PaymentIntentId;
                     orderHeader.Status = SD.StatusSubmitted;
                     _unitOfWork.Save();
                 }

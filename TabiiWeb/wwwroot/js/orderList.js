@@ -1,60 +1,54 @@
-﻿let table = new DataTable('#DT_load', {
-    "ajax": {
-        "url": "/api/order",
-        "type": "GET",
-        "datatype": "json"
-    },
-    "columns": [
-        {"data":"id","width":"15%"},
-        { "data": "pickUpName", "width": "15%" },
-        { "data": "applicationUser.email", "width": "15%" },
-        { "data": "orderTotal", "width": "15%" },
-        { "data": "pickUpTime", "width": "25%" },
-        {
-            "data": "id",
-            "render": function (data) {
-                return `<div class="w-75 btn-group">
-                            <a href="/Admin/Order/OrderDetails?id=${data}" class="btn btn-primary text-white mx-2">
-                            <i class="bi bi-pencil-square"></i></a>
-                            
-                        </div >`
-            },
-            "width": "15%"
-        },
-    ],
-    "width":"100%"
-
+﻿var table;
+$(document).ready(function () {
+    var url = window.location.search;
+    if (url.includes("cancelled")) {
+        loadList("cancelled");
+    }
+    else {
+        if (url.includes("completed")) {
+            loadList("completed");
+        }
+        else {
+            if (url.includes("ready")) {
+                loadList("ready");
+            }
+            else {
+                if (url.includes("inprocess")) {
+                    loadList("inprocess");
+                }
+                else {
+                    loadList("all");
+                }
+            }
+        }
+    }
 });
 
-function Delete(url) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire(
-                $.ajax({
-                    url: url,
-                    type: 'delete',
-                    success: function (data) {
-                        if (data.success) {
-                            table.ajax.reload();
-                            //success notification
-                            toastr.success(data.message);
-                        }
-                        else {
-                            //failure notification
-                            toastr.error(data.message);
+function loadList(param) {
+    table = $('#DT_load').DataTable({
+        "ajax": {
+            "url": "/api/order?status=" + param,
+            "type": "GET",
+            "datatype": "json"
+        },
+        "columns": [
+            { "data": "id", "width": "15%" },
+            { "data": "pickUpName", "width": "15%" },
+            { "data": "applicationUser.email", "width": "15%" },
+            { "data": "orderTotal", "width": "15%" },
+            { "data": "pickUpTime", "width": "25%" },
+            {
+                "data": "id",
+                "render": function (data) {
+                    return `<div class="w-75 btn-group" >
+                            <a href="/Admin/Order/OrderDetails?id=${data}"  class="btn btn-success text-white mx-2">
+                            <i class="bi bi-pencil-square"></i>  </a>
+                            </div>`
+                },
 
-                        }
-                    }
-                })
-            )
-        }
-    })
+                "width": "15%"
+            }
+        ],
+        "width": "100%"
+    });
 }
