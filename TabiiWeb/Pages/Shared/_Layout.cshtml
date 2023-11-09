@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TabiiWeb</title>
+    <title>@ViewData["Title"] Quán Nhậu TABII</title>
     <link rel="stylesheet" href="~/css/bootswatch_cyborg.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TabiiWeb.styles.css" asp-append-version="true" />
@@ -19,7 +19,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">TabiiWeb</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Quán Nhậu TABII</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -32,11 +32,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-while" asp-area="" asp-page="/Admin/Order/OrderList">Order List</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-while" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Order</a>
-                        </li>
-                        @if (User.IsInRole(SD.ManageRole))
+                        
+                        @if (User.IsInRole(SD.ManageRole) || User.IsInRole(SD.KitchenRole))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-while" asp-area="" asp-page="/Admin/Order/ManageOrder">Manage Order</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu">
@@ -51,7 +52,7 @@
 
                         <li>
                             <a class="nav-link text-white-50" asp-area="" asp-page="/Customer/Cart/Index">
-                                @* @await Component.InvokeAsync("ShoppingCart") *@
+                                <i class="bi bi-basket-fill"></i>
                             </a>
                         </li>
                     </ul>
